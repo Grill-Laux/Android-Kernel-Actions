@@ -47,6 +47,7 @@ jobs:
           ref: lineage-20
 #repository请填写<owner>/<repository>呦
 #ref填写branch就可以啦
+#如果需要手动编译就要注释掉if那一行了哦
 #别忘了看看下面 有些地方也是要改的哦
 
       - name: Cloning Sources and Toolchain
@@ -60,20 +61,20 @@ jobs:
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/aarch64-linux-android-4.9
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
           git clone https://github.com/osm0sis/anykernel
-#这里请修改上自己的clang编译器 如果你的也是r445002就没必要改了哦
+#这里要修改上自己的clang编译器喵 如果主人也需要r445002就没必要改了喵
       
       - name: Setup CLOSE ANDROID_PARANOID_NETWORK
         run: |
          sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/enchilada_defconfig
          echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/enchilada_defconfig
-#如果不需要的话请自行注释我这个小可爱的上下两段哦
+#不需要的话主人注释掉本喵的上下两段喵
       - name: Setup LXC_DOCKER
         run: |
          cd $GITHUB_WORKSPACE/
          wget https://github.com/wu17481748/lxc-docker/releases/download/lxc-docker-2config/LXC-DOCKER-OPEN-CONFIG.sh
          chmod 777 LXC-DOCKER-OPEN-CONFIG.sh
          ./LXC-DOCKER-OPEN-CONFIG.sh android-kernel/arch/arm64/configs/enchilada_defconfig -w
-#阁下需要打lxc patch的时候把前面的#去掉即可 别忘了看看内核源码中有没有/net/netfilter/xt_qtaguid.c这个文件 没有的话请不要取消注释
+#主人需要打lxc patch的时候就要前面的#去掉喵 也要记得检查下内核源码中有没有/net/netfilter/xt_qtaguid.c这个文件捏 没有就不要取消注释咯
 #      - name: Setup LXC_PATCH
 #        run: |
 #         cd $GITHUB_WORKSPACE/
@@ -82,7 +83,6 @@ jobs:
 #         unzip lxc-docker-2config.zip
 #         cd $GITHUB_WORKSPACE/lxc-docker-2config
 #         patch -p0 < lxc.patch
-#玩原神玩的
 
       - name: Compiling Kernel
         run: |
@@ -262,7 +262,7 @@ jobs:
           cp $GITHUB_WORKSPACE/android-kernel/out/arch/arm64/boot/Image.gz-dtb .
           zip -r boot.zip * -x .git README.md *placeholder
           ls
-#这里改下哦 把所有需要修改的路径和image格式都改下
+#这里改下喵 主人需要把image格式以及内核defconfig配置改下喵
 
 #      - name: Upload AnyKernel3
 #        uses: actions/upload-artifact@v3
@@ -273,11 +273,18 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ needs.check_kernelsu_update.outputs.kernelsu_release }}
+          tag_name: ${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}
           body: |
             Device:
             enchilada
+
+            KernelSource:
+            https://github.com/LineageOS/android_kernel_oneplus_sdm845
+            
             KernelSU:
             https://github.com/tiann/KernelSU/releases/tag/${{ needs.check_kernelsu_update.outputs.kernelsu_release }}
+
+            BuildTime
+            ${{ env.BUILD_TIME }}
           files: |
             AnyKernel3-master/boot.zip
