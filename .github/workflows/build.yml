@@ -273,7 +273,7 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: PixelExperience${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}_manual
+          tag_name: PixelExperience_${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}_manual
           body: |
             Device:
             enchilada or fajita
