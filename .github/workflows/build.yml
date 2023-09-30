@@ -273,13 +273,13 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}
+          tag_name: PixelExperience${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}
           body: |
             Device:
-            enchilada
+            enchilada or fajita
 
             KernelSource:
-            https://github.com/LineageOS/android_kernel_oneplus_sdm845
+            https://github.com/PixelExperience-Devices/kernel_oneplus_sdm845
             
             KernelSU:
             https://github.com/tiann/KernelSU/releases/tag/${{ needs.check_kernelsu_update.outputs.kernelsu_release }}
