@@ -43,8 +43,8 @@ jobs:
       - name: checkout kernel
         uses: actions/checkout@v3
         with:
-          repository: LineageOS/android_kernel_oneplus_sdm845
-          ref: lineage-20
+          repository: PixelExperience-Devices/kernel_oneplus_sdm845
+          ref: thirteen
 #repository请填写<owner>/<repository>呦
 #ref填写branch就可以啦
 #如果需要手动编译就要注释掉if那一行了哦
