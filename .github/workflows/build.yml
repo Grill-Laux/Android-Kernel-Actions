@@ -243,7 +243,7 @@ jobs:
           echo 123 > out/arch/arm64/boot/Image
           echo 123 > out/arch/arm64/boot/Image.gz
           echo 123 > out/arch/arm64/boot/Image.gz-dtb
-          curl -Lo AnyKernel3.zip https://github.com/osm0sis/AnyKernel3/archive/refs/heads/master.zip
+          curl -Lo AnyKernel3.zip https://github.com/Grill-Laux/AnyKernel3/archive/refs/heads/master.zip
           unzip AnyKernel3.zip
           cd AnyKernel3-master
           cat > anykernel.sh <<EOF
