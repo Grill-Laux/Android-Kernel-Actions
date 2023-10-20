@@ -43,8 +43,8 @@ jobs:
       - name: checkout kernel
         uses: actions/checkout@v3
         with:
-          repository: LineageOS/android_kernel_oneplus_sdm845
-          ref: lineage-20
+          repository: Grill-Laux/kernel_oneplus_sdm845
+          ref: thirteen
 #repository请填写<owner>/<repository>呦
 #ref填写branch就可以啦
 #如果需要手动编译就要注释掉if那一行了哦
@@ -56,8 +56,8 @@ jobs:
           sudo apt update -y
           sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
           sudo apt clean
-          git clone https://github.com/LineageOS/android_kernel_oneplus_sdm845 --depth=1 -b lineage-20 android-kernel
-          git clone https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r445002 --depth=1 --single-branch --no-tags -b 12.0 ~/toolchains/clang
+          git clone https://github.com/Grill-Laux/kernel_oneplus_sdm845 --depth=1 -b thirteen android-kernel
+          git clone https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r487747c --depth=1 --single-branch --no-tags -b 13.0 ~/toolchains/clang
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/aarch64-linux-android-4.9
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
 #这里要修改上自己的clang编译器喵 如果主人也需要r445002就没必要改了喵
@@ -272,13 +272,13 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: LineageOS_${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}_auto
+          tag_name: PixelExperience_${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}_auto
           body: |
             Device:
             enchilada
 
             KernelSource:
-            https://github.com/LineageOS/android_kernel_oneplus_sdm845
+            https://github.com/Grill-Laux/kernel_oneplus_sdm845
             
             KernelSU:
             https://github.com/tiann/KernelSU/releases/tag/${{ needs.check_kernelsu_update.outputs.kernelsu_release }}
