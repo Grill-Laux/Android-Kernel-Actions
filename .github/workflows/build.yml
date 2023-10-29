@@ -87,8 +87,6 @@ jobs:
           make O="$output_dir" enchilada_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           popd
-          tar -zcvf toolchains.tar.gz ~/toolchains
-          tar -zcvf kernelsu_source.tar.gz android-kernel
       - name: Resource organization
         run: |
           mkdir -p out/arch/arm64/boot/
@@ -114,13 +112,6 @@ jobs:
           zip -r boot.zip * -x .git README.md *placeholder
           ls
 #这里改下喵 主人需要把image格式以及内核defconfig配置改下喵
-
-#      - name: Upload AnyKernel3
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: AnyKernel3_enchilada-lineageos-${{ env.BUILD_TIME }}
-#          path: anykernel/*
-          
       - name: release
         uses: softprops/action-gh-release@v1
         with:
