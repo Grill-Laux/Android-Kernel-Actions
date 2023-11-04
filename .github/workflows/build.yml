@@ -44,7 +44,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: PixelExperience-Devices/kernel_oneplus_sdm845
-          ref: thirteen
+          ref: fourteen
 #repository请填写<owner>/<repository>呦
 #ref填写branch就可以啦
 #如果需要手动编译就要注释掉if那一行了哦
@@ -118,10 +118,10 @@ jobs:
           tag_name: PixelExperience_${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}_auto
           body: |
             Device:
-            enchilada
+            enchilada/fajita
 
             KernelSource:
-            https://github.com/Grill-Laux/kernel_oneplus_sdm845
+            https://github.com/PixelExperience-Devices/kernel_oneplus_sdm845/tree/fourteen
             
             KernelSU:
             https://github.com/tiann/KernelSU/releases/tag/${{ needs.check_kernelsu_update.outputs.kernelsu_release }}
