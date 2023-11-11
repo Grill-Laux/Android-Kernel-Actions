@@ -61,17 +61,17 @@ jobs:
           git clone https://github.com/osm0sis/anykernel
 #这里请修改上自己的clang编译器
       
-      - name: Setup CLOSE ANDROID_PARANOID_NETWORK
-        run: |
-         sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/enchilada_defconfig
-         echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/enchilada_defconfig
+#      - name: Setup CLOSE ANDROID_PARANOID_NETWORK
+#        run: |
+#         sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/enchilada_defconfig
+#         echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/enchilada_defconfig
 #如果不需要的话请自行注释我这个小可爱的上下两段哦
-      - name: Setup LXC_DOCKER
-        run: |
-         cd $GITHUB_WORKSPACE/
-         wget https://github.com/wu17481748/lxc-docker/releases/download/lxc-docker-2config/LXC-DOCKER-OPEN-CONFIG.sh
-         chmod 777 LXC-DOCKER-OPEN-CONFIG.sh
-         ./LXC-DOCKER-OPEN-CONFIG.sh android-kernel/arch/arm64/configs/enchilada_defconfig -w
+#      - name: Setup LXC_DOCKER
+#        run: |
+#         cd $GITHUB_WORKSPACE/
+#         wget https://github.com/wu17481748/lxc-docker/releases/download/lxc-docker-2config/LXC-DOCKER-OPEN-CONFIG.sh
+#         chmod 777 LXC-DOCKER-OPEN-CONFIG.sh
+#         ./LXC-DOCKER-OPEN-CONFIG.sh android-kernel/arch/arm64/configs/enchilada_defconfig -w
 #阁下需要打lxc patch的时候把前面的#去掉即可 别忘了看看内核源码中有没有/net/netfilter/xt_qtaguid.c这个文件 没有的话请不要取消注释
 #      - name: Setup LXC_PATCH
 #        run: |
@@ -235,8 +235,7 @@ jobs:
           make O="$output_dir" enchilada_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           popd
-          tar -zcvf toolchains.tar.gz ~/toolchains
-          tar -zcvf kernelsu_source.tar.gz android-kernel
+
       - name: Resource organization
         run: |
           mkdir -p out/arch/arm64/boot/
