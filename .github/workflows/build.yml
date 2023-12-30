@@ -132,7 +132,7 @@ jobs:
 #        with:
 #          name: AnyKernel3_enchilada-lineageos-${{ env.BUILD_TIME }}
 #          path: anykernel/*
-          
+#          
       - name: release
         uses: softprops/action-gh-release@v1
         with:
@@ -150,5 +150,6 @@ jobs:
             WARNING:
             I do NOT make any express or implied guarantee that you will not be able to boot after flashing this kernel.
             If you do not know how to flash the boot image from offical payload.bin , DO NOT try to flash!!!
-         files: |
+        
+          files: |
             AnyKernel3-master/boot.zip
