@@ -51,6 +51,13 @@ jobs:
 #         patch -p0 < lxc.patch
 #
 
+      - name: fix errors
+        run: |
+          cd $GITHUB_WORKPLACE/
+          cd android-kernel
+          cd techpack
+          git clone https://github.com/OnePlusOSS/android_kernel_oneplus_sdm845_techpack_audio.git -b oneplus/SDM845_R_11.0 audio
+      
       - name: Compiling Kernel
         run: |
           CLANG=~/toolchains/clang/bin
