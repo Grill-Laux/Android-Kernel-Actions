@@ -63,8 +63,8 @@ jobs:
       
       - name: Setup CLOSE ANDROID_PARANOID_NETWORK
         run: |
-         sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/enchilada_defconfig
-         echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/enchilada_defconfig
+         sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/sdm845-perf_defconfig
+         echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/sdm845-perf_defconfig
 #如果不需要的话请自行注释我这个小可爱的上下两段哦
       - name: Setup LXC_DOCKER
         run: |
@@ -81,7 +81,7 @@ jobs:
 #         unzip lxc-docker-2config.zip
 #         cd $GITHUB_WORKSPACE/lxc-docker-2config
 #         patch -p0 < lxc.patch
-#玩原神玩的
+#
 
       - name: Compiling Kernel
         run: |
@@ -229,14 +229,13 @@ jobs:
           CONFIG_UNIX_DIAG=y
           CONFIG_NETFILTER_XT_TARGET_CHECKSUM=y
           CONFIG_CFS_BANDWIDTH=y
-          " >> arch/arm64/configs/enchilada_defconfig
+          " >> arch/arm64/configs/sdm845-perf_defconfig
           #sudo cp -r ../Tools/file security/selinux/hooks.c
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main
-          make O="$output_dir" enchilada_defconfig
+          make O="$output_dir" sdm845-perf_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           popd
-          tar -zcvf toolchains.tar.gz ~/toolchains
-          tar -zcvf kernelsu_source.tar.gz android-kernel
+          
       - name: Resource organization
         run: |
           mkdir -p out/arch/arm64/boot/
