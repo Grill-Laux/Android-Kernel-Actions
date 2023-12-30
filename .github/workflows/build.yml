@@ -12,42 +12,11 @@ on:
     - cron: "50 9,21 * * *"
 
 jobs:
-  check_kernelsu_update:
-    name: check kernelsu update
-    runs-on: ubuntu-latest
-    steps:
-      - name: install common package
-        run: |
-          sudo apt update
-          sudo apt install -y curl jq
-      - name: check kernelsu release
-        id: check_kernelsu_release
-        run: |
-          kernelsu_release=`curl https://api.github.com/repos/tiann/KernelSU/releases/latest | jq -r .tag_name`
-          local_release=`curl --header 'authorization: Bearer ${{ github.token }}' https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name`
-          echo $kernelsu_release
-          echo $local_release
-          echo kernelsu_release=$kernelsu_release >> $GITHUB_OUTPUT
-          echo local_release=$local_release >> $GITHUB_OUTPUT
-    outputs:
-      kernelsu_release: ${{ steps.check_kernelsu_release.outputs.kernelsu_release }}
-      local_release: ${{ steps.check_kernelsu_release.outputs.local_release }}
-
   build:
-    needs: check_kernelsu_update
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: checkout kernel
-        uses: actions/checkout@v3
-        with:
-          repository: Grill-Laux/android_kernel_oneplus_sdm845
-          ref: 11.0
-#repository请填写<owner>/<repository>呦
-#ref填写branch就可以啦
-#别忘了看看下面 有些地方也是要改的哦
-
       - name: Cloning Sources and Toolchain
         run: |
           echo "BUILD_TIME=$(TZ=Asia/Shanghai date "+%Y%m%d%H%M")" >> $GITHUB_ENV
@@ -136,7 +105,7 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: OxygenOS_${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}_manual
+          tag_name: OxygenOS_0.7.1_${{ env.BUILD_TIME }}_manual
           body: |
             Device:
             enchilada / fajita
@@ -145,7 +114,7 @@ jobs:
             github.com/Grill-Laux/android_kernel_oneplus_sdm845
             
             KernelSU:
-            github.com/tiann/KernelSU/releases/tag/${{ needs.check_kernelsu_update.outputs.kernelsu_release }}
+            github.com/tiann/KernelSU/releases/tag/0.7.1
 
             WARNING:
             I do NOT make any express or implied guarantee that you will not be able to boot after flashing this kernel.
