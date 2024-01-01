@@ -33,10 +33,10 @@ jobs:
       - name: Downloading Clang-r416183b
         run: |
           cd $GITHUB_WORKSPACE
-          cd toolchains/clang
+          cd toolchains && mkdir clang && cd clang
           wget https://android.googlesource.com/platform//prebuilts/clang/host/linux-x86/+archive/3857008389202edac32d57008bb8c99d2c957f9d/clang-r416183b.tar.gz
           tar -zxvf *.tar.gz
-          rm -rf *.tar.gz
+          rm -rf *.tar.gz && cd $GITHUB_WORKSPACE/android-kernel
 
       - name: Setup CLOSE ANDROID_PARANOID_NETWORK
         run: |
