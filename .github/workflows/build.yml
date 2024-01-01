@@ -204,6 +204,7 @@ jobs:
           " >> arch/arm64/configs/mcd_defconfig
 
       - name: Compiling Kernel
+        run: |
           make O="$output_dir" mcd_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           popd
