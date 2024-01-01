@@ -54,8 +54,8 @@ jobs:
         run: |
          cd $GITHUB_WORKSPACE/
          wget https://github.com/wu17481748/lxc-docker/archive/refs/tags/lxc-docker-2config.zip
-         unzip lxc-docker-2config.zip
-         cd $GITHUB_WORKSPACE/lxc-docker-2config
+         unzip lxc-docker-lxc-docker-2config.zip
+         cd $GITHUB_WORKSPACE/lxc-docker-lxc-docker-2config
          patch -p0 < lxc.patch
 
       - name: Parparing Build Environment[2/2]
