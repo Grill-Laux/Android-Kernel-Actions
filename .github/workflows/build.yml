@@ -206,7 +206,8 @@ jobs:
 
       - name: Compiling Kernel
         run: |
-          make O="$output_dir" mcd_defconfig
+          cd $GITHUB_WORKSPACE && cd android-kernel
+          make O="$output_dir" arch/arm64/configs/mcd_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           popd
           
