@@ -202,7 +202,7 @@ jobs:
           export CROSS_COMPILE=aarch64-linux-android-
           export CROSS_COMPILE_ARM32=arm-linux-androideabi-
           output_dir=out
-          make O="$output_dir" arch/arm64/configs/mcd_defconfig
+          make O="$output_dir" mcd_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           popd
           
