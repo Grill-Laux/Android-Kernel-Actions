@@ -53,8 +53,7 @@ jobs:
       - name: Setup LXC_PATCH
         run: |
          cd $GITHUB_WORKSPACE/
-         git clone https://github.com/wu17481748/lxc-docker/archive/refs/tags/lxc-docker-2config.zip
-         cd $GITHUB_WORKSPACE/
+         wget https://github.com/wu17481748/lxc-docker/archive/refs/tags/lxc-docker-2config.zip
          unzip lxc-docker-2config.zip
          cd $GITHUB_WORKSPACE/lxc-docker-2config
          patch -p0 < lxc.patch
