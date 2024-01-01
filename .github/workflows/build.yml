@@ -40,8 +40,8 @@ jobs:
 
       - name: Setup CLOSE ANDROID_PARANOID_NETWORK
         run: |
-         sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/sdm845-perf_defconfig
-         echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/sdm845-perf_defconfig
+         sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/mcd_defconfig
+         echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/mcd_defconfig
 
       - name: Setup LXC_DOCKER
         run: |
@@ -75,6 +75,7 @@ jobs:
 
       - name: Supporting KernelSU and Change the Defconfig
         run: |
+          cd $GITHUB_WORKSPACE && cd android-kernel
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
           echo "CONFIG_KPROBES=y
           CONFIG_HAVE_KPROBES=y
