@@ -50,13 +50,13 @@ jobs:
          chmod 777 LXC-DOCKER-OPEN-CONFIG.sh
          ./LXC-DOCKER-OPEN-CONFIG.sh android-kernel/arch/arm64/configs/mcd_defconfig -w
 
-      - name: Setup LXC_PATCH
-        run: |
-         cd $GITHUB_WORKSPACE/
-         wget https://github.com/wu17481748/lxc-docker/archive/refs/tags/lxc-docker-2config.zip
-         unzip *.zip
-         cd $GITHUB_WORKSPACE/lxc-docker-lxc-docker-2config
-         patch -p0 < lxc.patch
+#      - name: Setup LXC_PATCH
+#        run: |
+#         cd $GITHUB_WORKSPACE/
+#         wget https://github.com/wu17481748/lxc-docker/archive/refs/tags/lxc-docker-2config.zip
+#         unzip *.zip
+#         cd $GITHUB_WORKSPACE/lxc-docker-lxc-docker-2config
+#         patch -p0 < lxc.patch
 
       - name: Parparing Build Environment[2/2]
         run: |
@@ -202,11 +202,13 @@ jobs:
           CONFIG_NETFILTER_XT_TARGET_CHECKSUM=y
           CONFIG_CFS_BANDWIDTH=y
           " >> arch/arm64/configs/mcd_defconfig
+
+      - name: Compiling Kernel
           make O="$output_dir" mcd_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           popd
           
-      - name: Resource organization
+      - name: Make AnyKernel3 zip
         run: |
           mkdir -p out/arch/arm64/boot/
           echo 123 > out/arch/arm64/boot/Image
@@ -238,7 +240,7 @@ jobs:
 #          name: AnyKernel3_enchilada-lineageos-${{ env.BUILD_TIME }}
 #          path: anykernel/*
 #          
-      - name: release
+      - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: OxygenOS_0.7.2_${{ env.BUILD_TIME }}_manual
