@@ -30,13 +30,12 @@ jobs:
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/aarch64-linux-android-4.9
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
 
-      - name: Downloading Clang-r416183b
+      - name: Downloading MCD Clang
         run: |
           cd $GITHUB_WORKSPACE
-          cd toolchains && mkdir clang && cd clang
-          wget https://android.googlesource.com/platform//prebuilts/clang/host/linux-x86/+archive/3857008389202edac32d57008bb8c99d2c957f9d/clang-r416183b.tar.gz
-          tar -zxvf *.tar.gz
-          rm -rf *.tar.gz && cd $GITHUB_WORKSPACE/android-kernel
+          cd toolchain
+          git clone https://github.com/mcdachpappe/mcd-clang.git clang
+          cd $GITHUB_WORKSPACE
 
       - name: Setup CLOSE ANDROID_PARANOID_NETWORK
         run: |
@@ -247,7 +246,7 @@ jobs:
             enchilada / fajita
 
             Kernel Source:
-            github.com/Grill-Laux/android_kernel_oneplus_sdm845
+            github.com/Grill-Laux/mcd_kernel_oneplus_sdm845
             
             KernelSU:
             github.com/tiann/KernelSU/releases/tag/0.7.2
