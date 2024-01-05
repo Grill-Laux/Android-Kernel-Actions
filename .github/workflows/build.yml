@@ -33,7 +33,7 @@ jobs:
       - name: Downloading MCD Clang
         run: |
           cd $GITHUB_WORKSPACE
-          cd toolchain
+          cd toolchains
           git clone https://github.com/mcdachpappe/mcd-clang.git clang
           cd $GITHUB_WORKSPACE
 
