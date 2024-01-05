@@ -17,7 +17,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Cloning Kernel Sources and Parparing Environment[1/2]
+      - name: Cloning Kernel Sources and Parparing Environment
         run: |
           echo "BUILD_TIME=$(TZ=Asia/Shanghai date "+%Y%m%d%H%M")" >> $GITHUB_ENV
           sudo apt update -y
@@ -32,10 +32,7 @@ jobs:
 
       - name: Downloading MCD Clang
         run: |
-          cd $GITHUB_WORKSPACE
-          cd toolchains
-          git clone https://github.com/mcdachpappe/mcd-clang.git clang
-          cd $GITHUB_WORKSPACE
+          git clone https://github.com/mcdachpappe/mcd-clang.git ~/toolchains/clang
 
       - name: Setup CLOSE ANDROID_PARANOID_NETWORK
         run: |
@@ -257,3 +254,4 @@ jobs:
         
           files: |
             AnyKernel3-master/boot.zip
+            android-kernel/out/arch/arm64/boot/*
