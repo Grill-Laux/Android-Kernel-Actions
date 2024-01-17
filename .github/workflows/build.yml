@@ -62,6 +62,11 @@ jobs:
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
 #这里要修改上自己的clang编译器喵
       
+      - name: Pulling KernelSU Submodule
+        run: |
+          cd android-kernel/KernelSU
+          git pull && cd .. && cd ..
+      
       - name: Compiling Kernel
         run: |
           CLANG=~/toolchains/clang/bin
