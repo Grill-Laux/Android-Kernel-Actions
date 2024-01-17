@@ -64,8 +64,10 @@ jobs:
       
       - name: Pulling KernelSU Submodule
         run: |
-          cd android-kernel/KernelSU
-          git pull && cd .. && cd ..
+          cd android-kernel
+          rm -rf KernelSU
+          curl -LSs "https://raw.githubusercontent.com/wxt1221/KernelSU/main/kernel/setup.sh" | bash -
+          cd ..
       
       - name: Compiling Kernel
         run: |
