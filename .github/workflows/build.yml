@@ -9,7 +9,7 @@ on:
         default: false
 
   schedule:
-    - cron: "50 9,21 * * *"
+    - cron: "* 8,12,15,18,22 * * *"
 
 jobs:
   check_kernelsu_update:
@@ -23,7 +23,7 @@ jobs:
       - name: check kernelsu release
         id: check_kernelsu_release
         run: |
-          kernelsu_release=`curl https://api.github.com/repos/tiann/KernelSU/releases/latest | jq -r .tag_name`
+          kernelsu_release=`curl https://api.github.com/repos/wxt1221/KernelSU/releases/latest | jq -r .tag_name`
           local_release=`curl --header 'authorization: Bearer ${{ github.token }}' https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name`
           echo $kernelsu_release
           echo $local_release
@@ -35,7 +35,7 @@ jobs:
 
   build:
     needs: check_kernelsu_update
-    if: needs.check_kernelsu_update.outputs.kernelsu_release != needs.check_kernelsu_update.outputs.local_release
+    #if: needs.check_kernelsu_update.outputs.kernelsu_release != needs.check_kernelsu_update.outputs.local_release
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -115,9 +115,15 @@ jobs:
             https://github.com/Grill-Laux/PixelExperience_kernel_oneplus_sdm845/tree/fourteen
             
             KernelSU:
-            https://github.com/Grill-Laux/KernelSU
+            https://github.com/wxt1221/KernelSU
+            WARN!You must install the manager app from "https://github.com/wxt1221/KernelSU",or your KernelSU will not work!
 
             BuildTime
             ${{ env.BUILD_TIME }}
+
+            Supported:
+            LXC
+            Docker
+            KernelSU
           files: |
             AnyKernel3-master/boot.zip
