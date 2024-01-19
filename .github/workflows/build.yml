@@ -8,9 +8,6 @@ on:
         type: boolean
         default: false
 
-  schedule:
-    - cron: "* 8,12,15,18,22 * * *"
-
 jobs:
   check_kernelsu_update:
     name: check kernelsu update
@@ -40,23 +37,13 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: checkout kernel
-        uses: actions/checkout@v3
-        with:
-          repository: PixelExperience-Devices/kernel_oneplus_sdm845
-          ref: fourteen
-#repository请填写<owner>/<repository>呦
-#ref填写branch就可以啦
-#如果需要手动编译就要注释掉if那一行了哦
-#别忘了看看下面 有些地方也是要改的哦
-
       - name: Cloning Sources and Toolchain
         run: |
           echo "BUILD_TIME=$(TZ=Asia/Shanghai date "+%Y%m%d%H%M")" >> $GITHUB_ENV
           sudo apt update -y
           sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
           sudo apt clean
-          git clone https://github.com/Grill-Laux/PixelExperience_kernel_oneplus_sdm845 --recursive --depth=1 -b fourteen android-kernel
+          git clone https://github.com/Grill-Laux/android_pe_kernel_oneplus_sdm845 --recursive --depth=1 -b fourteen-wip android-kernel
           git clone https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r445002 --depth=1 --single-branch --no-tags -b 12.0 ~/toolchains/clang
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/aarch64-linux-android-4.9
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
@@ -112,7 +99,7 @@ jobs:
             enchilada/fajita
 
             KernelSource:
-            https://github.com/Grill-Laux/PixelExperience_kernel_oneplus_sdm845/tree/fourteen
+            https://github.com/Grill-Laux/android_pe_kernel_oneplus_sdm845/tree/fourteen-wip
             
             KernelSU:
             https://github.com/wxt1221/KernelSU
@@ -125,5 +112,7 @@ jobs:
             LXC
             Docker
             KernelSU
+
+            WARNING:This kernel is only for test.After flash this kernel,your device might cannot boot.
           files: |
             AnyKernel3-master/boot.zip
