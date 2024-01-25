@@ -56,7 +56,7 @@ jobs:
           sudo apt update -y
           sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
           sudo apt clean
-          git clone https://github.com/zamasu0/kernel_oneplus_sdm845 --recursive --depth=1 -b fourteen android-kernel
+          git clone https://github.com/Grill-Laux/android_kernel_oneplus_sdm845 --recursive --depth=1 android-kernel
           wget -P ~/toolchain https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r498229b.tar.gz && mv ~/toolchains/clang-r498229b.tar.gz ~/toolchains/clang.tar.gz && tar -zxvf ~/toolchains/clang.tar.gz && ls ~/toolchains && ls ~/toolchains/clang
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/aarch64-linux-android-4.9
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
@@ -75,9 +75,10 @@ jobs:
           export CROSS_COMPILE_ARM32=arm-linux-androideabi-
           output_dir=out
           pushd android-kernel
-          make O="$output_dir" enchilada_defconfig
+          make O="$output_dir" vendor/enchilada_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           popd
+          
       - name: Resource organization
         run: |
           mkdir -p out/arch/arm64/boot/
@@ -106,17 +107,17 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: PixelExperience_${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}_test
+          tag_name: LineageOS_4.19_${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}_test
           body: |
             Device:
             enchilada/fajita
 
             KernelSource:
-            https://github.com/zamasu0/kernel_oneplus_sdm845/tree/fourteen
+            https://github.com/OnePlus-sdm845-4-19/android_kernel_oneplus_sdm845
             
             KernelSU:
-            https://github.com/wxt1221/KernelSU
-            WARN!You must install the manager app from "https://github.com/wxt1221/KernelSU",or your KernelSU will not work!
+            https://github.com/tiann/KernelSU
+            WARN!You must install the manager app from "https://github.com/tiann/KernelSU",or your KernelSU will not work!
 
             BuildTime
             ${{ env.BUILD_TIME }}
