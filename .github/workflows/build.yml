@@ -57,7 +57,7 @@ jobs:
           sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
           sudo apt clean
           git clone https://github.com/Grill-Laux/android_kernel_oneplus_sdm845 --recursive --depth=1 android-kernel
-          wget -P ~/toolchain https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r498229b.tar.gz && mv ~/toolchains/clang-r498229b.tar.gz ~/toolchains/clang.tar.gz && tar -zxvf ~/toolchains/clang.tar.gz && ls ~/toolchains && ls ~/toolchains/clang
+          wget -P ~/toolchain https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r498229b.tar.gz && cd ~/toolchains && mv clang-r498229b.tar.gz clang.tar.gz && tar -zxvf clang.tar.gz && ls ~/toolchains && ls ~/toolchains/clang && cd ..
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/aarch64-linux-android-4.9
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
 #这里要修改上自己的clang编译器喵
