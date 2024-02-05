@@ -25,7 +25,7 @@ jobs:
           sudo apt clean
           git clone https://github.com/Grill-Laux/oos_kernel_oneplus_sdm845 -b oneplus/SDM845_R_11.0 android-kernel
           wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android11-release/clang-r383902b.tar.gz
-          cd ~/toolchains && mkdir clang && cd .. && tar -zxvf clang-r383902b.tar.gz -C ~/toolchains/clang
+          mkdir -p ~/toolchains/clang && tar -zxvf clang-r383902b.tar.gz -C ~/toolchains/clang
       
       - name: Cloning GCC
         run: |
