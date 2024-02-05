@@ -23,7 +23,7 @@ jobs:
           sudo apt update -y
           sudo apt-get install git ccache wget automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
           sudo apt clean
-          git clone https://github.com/Grill-Laux/oos_kernel_oneplus_sdm845 android-kernel
+          git clone https://github.com/Grill-Laux/oos_kernel_oneplus_sdm845 -b oneplus/SDM845_R_11.0 android-kernel
 
       - name: Cloning GCC
         run: |
@@ -183,11 +183,14 @@ jobs:
           CONFIG_UNIX_DIAG=y
           CONFIG_NETFILTER_XT_TARGET_CHECKSUM=y
           CONFIG_CFS_BANDWIDTH=y
-          " >> arch/arm64/configs/mcd_defconfig
+          " >> arch/arm64/configs/sdm845-perf_defconfig
+          cd $GITHUB_WORKSPACE/android-kernel/techpack
+          git clone https://github.com/OnePlusOSS/android_kernel_oneplus_sdm845_techpack_audio -b oneplus/SDM845_R_11.0 audio
+          
 
       - name: Compiling Kernel
         run: |
-          cd $GITHUB_WORKSPACE && cd android-kernel
+          cd $GITHUB_WORKSPACE/android-kernel
           CLANG=~/toolchains/clang/bin
           GCC32=~/toolchains/arm-linux-androideabi-4.9/bin
           GCC64=~/toolchains/aarch64-linux-android-4.9/bin
@@ -198,7 +201,7 @@ jobs:
           export CROSS_COMPILE=aarch64-linux-android-
           export CROSS_COMPILE_ARM32=arm-linux-androideabi-
           output_dir=out
-          make O="$output_dir" mcd_defconfig
+          make O="$output_dir" sdm845-perf_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           popd
           
@@ -237,7 +240,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: OxygenOS_0.7.2_${{ env.BUILD_TIME }}_manual
+          tag_name: OxygenOS_0.7.6_${{ env.BUILD_TIME }}_manual
           body: |
             Device:
             enchilada / fajita
@@ -246,7 +249,7 @@ jobs:
             github.com/Grill-Laux/mcd_kernel_oneplus_sdm845
             
             KernelSU:
-            github.com/tiann/KernelSU/releases/tag/0.7.2
+            github.com/tiann/KernelSU/releases/tag/0.7.6
 
             WARNING:
             I do NOT make any express or implied guarantee that you will not be able to boot after flashing this kernel.
