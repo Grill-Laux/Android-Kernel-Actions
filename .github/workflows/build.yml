@@ -37,14 +37,14 @@ jobs:
       - name: Setup CLOSE ANDROID_PARANOID_NETWORK
         run: |
          sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/mcd_defconfig
-         echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/mcd_defconfig
+         echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/sdm845-perf_defconfig
 
       - name: Setup LXC_DOCKER
         run: |
          cd $GITHUB_WORKSPACE/
          wget https://github.com/wu17481748/lxc-docker/releases/download/lxc-docker-2config/LXC-DOCKER-OPEN-CONFIG.sh
          chmod 777 LXC-DOCKER-OPEN-CONFIG.sh
-         ./LXC-DOCKER-OPEN-CONFIG.sh android-kernel/arch/arm64/configs/mcd_defconfig -w
+         ./LXC-DOCKER-OPEN-CONFIG.sh android-kernel/arch/arm64/configs/sdm845-perf_defconfig -w
 
 #      - name: Setup LXC_PATCH
 #        run: |
