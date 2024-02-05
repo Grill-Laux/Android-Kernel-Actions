@@ -36,7 +36,7 @@ jobs:
 
       - name: Setup CLOSE ANDROID_PARANOID_NETWORK
         run: |
-         sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/mcd_defconfig
+         sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/sdm845-perf_defconfig
          echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/sdm845-perf_defconfig
 
       - name: Setup LXC_DOCKER
