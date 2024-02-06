@@ -42,19 +42,8 @@ jobs:
       - name: Compiling Kernel
         run: |
           cd $GITHUB_WORKSPACE/android-kernel
-          CLANG=~/toolchains/clang/bin
-          GCC32=~/toolchains/arm-linux-androideabi-4.9/bin
-          GCC64=~/toolchains/aarch64-linux-android-4.9/bin
-          PATH=$CLANG:$GCC64:$GCC32:$PATH
-          export PATH
-          export ARCH=arm64
-          export CLANG_TRIPLE=aarch64-linux-gnu
-          export CROSS_COMPILE=aarch64-linux-android-
-          export CROSS_COMPILE_ARM32=arm-linux-androideabi-
-          output_dir=out
-          make O="$output_dir" sdm845-perf_defconfig
-          make O="$output_dir" CC=clang -j (nproc --all) 2>&1
-          popd
+          chmod +x build_kernel_github_action.sh
+          ./build_kernel_github_action.sh
           
       - name: Make AnyKernel3 zip
         run: |
