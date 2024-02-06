@@ -24,170 +24,19 @@ jobs:
           sudo apt-get install git ccache wget automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
           sudo apt clean
           git clone https://github.com/Grill-Laux/oos_kernel_oneplus_sdm845 -b oneplus/SDM845_R_11.0 android-kernel
-          wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android11-release/clang-r383902b.tar.gz
-          mkdir -p ~/toolchains/clang && tar -zxvf clang-r383902b.tar.gz -C ~/toolchains/clang
+          git clone https://github.com/Grill-Laux/proton-clang.git --depth=1 ~/toolchains/clang
       
       - name: Cloning GCC
         run: |
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/aarch64-linux-android-4.9
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
 
-#      - name: Downloading MCD Clang
-#        run: |
-#          git clone https://github.com/mcdachpappe/mcd-clang.git ~/toolchains/clang
-
-      - name: Setup CLOSE ANDROID_PARANOID_NETWORK
-        run: |
-         sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/sdm845-perf_defconfig
-         echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/sdm845-perf_defconfig
-
-      - name: Setup LXC_DOCKER
-        run: |
-         cd $GITHUB_WORKSPACE/
-         wget https://github.com/wu17481748/lxc-docker/releases/download/lxc-docker-2config/LXC-DOCKER-OPEN-CONFIG.sh
-         chmod 777 LXC-DOCKER-OPEN-CONFIG.sh
-         ./LXC-DOCKER-OPEN-CONFIG.sh android-kernel/arch/arm64/configs/sdm845-perf_defconfig -w
-
-#      - name: Setup LXC_PATCH
-#        run: |
-#         cd $GITHUB_WORKSPACE/
-#         wget https://github.com/wu17481748/lxc-docker/archive/refs/tags/lxc-docker-2config.zip
-#         unzip *.zip
-#         cd $GITHUB_WORKSPACE/lxc-docker-lxc-docker-2config
-#         patch -p0 < lxc.patch
-
       - name: Supporting KernelSU and Change the Defconfig
         run: |
           cd $GITHUB_WORKSPACE && cd android-kernel
           curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
-          echo "CONFIG_KPROBES=y
-          CONFIG_HAVE_KPROBES=y
-          CONFIG_KPROBE_EVENTS=y
-          CONFIG_SECURITY_SELINUX_DEVELOP=y
-          CONFIG_SAMPLE_KPROBES=y
-          CONFIG_SAMPLE_KRETPROBES=y
-          CONFIG_NAMESPACES=y
-          CONFIG_MULTIUSER=y
-          CONFIG_NET=y
-          CONFIG_NET_NS=y
-          CONFIG_PID_NS=y
-          CONFIG_POSIX_MQUEUE=y 
-          CONFIG_IPC_NS=y
-          CONFIG_UTS_NS=y
-          CONFIG_NETFILTER_XT_MATCH_BPF=y
-          CONFIG_CPUSETS=y
-          CONFIG_MEMCG=y
-          CONFIG_KEYS=y
-          CONFIG_NETDEVICES=y
-          CONFIG_NET_CORE=y
-          CONFIG_VETH=y
-          CONFIG_IPV6=y
-          CONFIG_IP6_NF_NAT=y
-          CONFIG_IP6_NF_TARGET_MASQUERADE=y
-          CONFIG_BRIDGE=y
-          CONFIG_NETFILTER=y
-          CONFIG_INET=y
-          CONFIG_NETFILTER_ADVANCED=y
-          CONFIG_BRIDGE_NETFILTER=y
-          CONFIG_IP_NF_FILTER=y
-          CONFIG_IP_NF_IPTABLES=y
-          CONFIG_IP_NF_NAT=y
-          CONFIG_IP_NF_TARGET_MASQUERADE=y
-          CONFIG_NETFILTER_XTABLES=y
-          CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y
-          CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
-          CONFIG_NF_CONNTRACK=y
-          CONFIG_NETFILTER_XT_MATCH_IPVS=y
-          CONFIG_IP_VS=y
-          CONFIG_NETFILTER_XT_MARK=y
-          CONFIG_NF_NAT=y
-          CONFIG_POSIX_MQUEUE=y
-          CONFIG_NF_NAT_IPV6=y
-          CONFIG_NF_NAT_IPV4=y
-          CONFIG_NF_CONNTRACK_IPV4=y
-          CONFIG_NF_CONNTRACK_IPV6=y
-          CONFIG_NF_NAT_NEEDED=y
-          CONFIG_BPF=y
-          CONFIG_CGROUP_BPF=y
-          CONFIG_BPF_SYSCALL=y
-          CONFIG_USER_NS=y
-          CONFIG_SECCOMP=y
-          CONFIG_SECCOMP_FILTER=y
-          CONFIG_CGROUP_PIDS=y
-          CONFIG_CGROUP_DEBUG=y
-          CONFIG_SWAP=y
-          CONFIG_MEMCG_SWAP=y
-          CONFIG_MEMCG_SWAP_ENABLED=y
-          CONFIG_BLOCK=y
-          CONFIG_IOSCHED_CFQ=y
-          CONFIG_BLK_CGROUP=y
-          CONFIG_CFQ_GROUP_IOSCHED=y
-          CONFIG_BLK_DEV_THROTTLING=y
-          CONFIG_PERF_EVENTS=y
-          CONFIG_CGROUP_PERF=y
-          CONFIG_HUGETLB_PAGE=y
-          CONFIG_CGROUP_HUGETLB=y
-          CONFIG_NET_SCHED=y
-          CONFIG_NET_CLS_CGROUP=y
-          CONFIG_CGROUP_NET_PRIO=y
-          CONFIG_FAIR_GROUP_SCHED=y
-          CONFIG_!SCHED_WALT=y
-          CONFIG_RT_GROUP_SCHED=y
-          CONFIG_IP_NF_TARGET_REDIRECT=y
-          CONFIG_IP_VS_NFCT=y
-          CONFIG_IP_VS_PROTO_TCP=y
-          CONFIG_IP_VS_PROTO_UDP=y
-          CONFIG_IP_VS_RR=y
-          CONFIG_SECURITY=y
-          CONFIG_SECURITY_SELINUX=y
-          CONFIG_SECURITY_APPARMOR=y
-          CONFIG_EXT3_FS=y
-          CONFIG_EXT3_FS_POSIX_ACL=y
-          CONFIG_EXT3_FS_SECURITY=y
-          CONFIG_EXT4_FS=y
-          CONFIG_EXT4_FS_POSIX_ACL=y
-          CONFIG_EXT4_FS_SECURITY=y
-          CONFIG_VXLAN=y
-          CONFIG_BRIDGE=y
-          CONFIG_BRIDGE_VLAN_FILTERING=y
-          CONFIG_VLAN_8021Q=y
-          CONFIG_CRYPTO=y
-          CONFIG_CRYPTO_AEAD=y
-          CONFIG_CRYPTO_GCM=y
-          CONFIG_CRYPTO_SEQIV=y
-          CONFIG_CRYPTO_GHASH=y
-          CONFIG_CHECKPOINT_RESTORE=y
-          CONFIG_XFRM=y
-          CONFIG_XFRM_USER=y
-          CONFIG_XFRM_ALGO=y
-          CONFIG_INET_ESP=y
-          CONFIG_INET_XFRM_MODE_TRANSPORT=y
-          CONFIG_IPVLAN=y
-          CONFIG_MACVLAN=y
-          CONFIG_NET_L3_MASTER_DEV=y
-          CONFIG_DUMMY=y
-          CONFIG_NF_NAT_FTP=y
-          CONFIG_NF_CONNTRACK_FTP=y
-          CONFIG_NF_NAT_TFTP=y
-          CONFIG_NF_CONNTRACK_TFTP=y
-          CONFIG_AUFS_FS=y
-          CONFIG_BTRFS_FS=y
-          CONFIG_BTRFS_FS_POSIX_ACL=y
-          CONFIG_MD=y
-          CONFIG_BLK_DEV_DM=y
-          CONFIG_DM_THIN_PROVISIONING=y
-          CONFIG_OVERLAY_FS=y
-          CONFIG_PACKET=y
-          CONFIG_PACKET_DIAG=y
-          CONFIG_NETLINK_DIAG=y
-          CONFIG_FHANDLE=y
-          CONFIG_UNIX=y
-          CONFIG_UNIX_DIAG=y
-          CONFIG_NETFILTER_XT_TARGET_CHECKSUM=y
-          CONFIG_CFS_BANDWIDTH=y
-          " >> arch/arm64/configs/sdm845-perf_defconfig
           cd $GITHUB_WORKSPACE/android-kernel/techpack
-          git clone https://github.com/OnePlusOSS/android_kernel_oneplus_sdm845_techpack_audio -b oneplus/SDM845_R_11.0 audio
+          
           
 
       - name: Compiling Kernel
@@ -248,11 +97,13 @@ jobs:
             enchilada / fajita
 
             Kernel Source:
-            github.com/Grill-Laux/mcd_kernel_oneplus_sdm845
+            github.com/Grill-Laux/OOS_kernel_oneplus_sdm845
             
             KernelSU:
             github.com/tiann/KernelSU/releases/tag/0.7.6
 
+            TEST VERSION.
+            This version only for test, it isn't supported ksu.
             WARNING:
             I do NOT make any express or implied guarantee that you will not be able to boot after flashing this kernel.
             If you do not know how to flash the boot image from offical payload.bin , DO NOT try to flash!!!
