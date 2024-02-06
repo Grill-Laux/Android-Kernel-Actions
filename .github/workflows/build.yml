@@ -53,7 +53,7 @@ jobs:
           export CROSS_COMPILE_ARM32=arm-linux-androideabi-
           output_dir=out
           make O="$output_dir" sdm845-perf_defconfig
-          make -j $(nproc) O="$output_dir" CC=clang
+          make O="$output_dir" CC=clang -j(nproc --all) 2>&1
           popd
           
       - name: Make AnyKernel3 zip
