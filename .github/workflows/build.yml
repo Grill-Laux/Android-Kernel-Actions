@@ -36,8 +36,8 @@ jobs:
       - name: Supporting KernelSU and Change the Defconfig
         run: |
           cd $GITHUB_WORKSPACE && cd android-kernel
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
-          cd $GITHUB_WORKSPACE/android-kernel/techpack
+          #curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+          #cd $GITHUB_WORKSPACE/android-kernel/techpack
           
           
 
