@@ -94,7 +94,7 @@ jobs:
           split_boot
           flash_boot
           EOF
-          cp $GITHUB_WORKSPACE/android-kernel/out/arch/arm64/boot/Image.gz-dtb .
+          cp $GITHUB_WORKSPACE/android-kernel/out/arch/arm64/boot/Image.gz .
           zip -r boot.zip * -x .git README.md *placeholder
           ls
 #这里改下喵 主人需要把image格式以及内核defconfig配置改下喵
