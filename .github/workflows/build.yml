@@ -55,7 +55,7 @@ jobs:
      
       - name: Compiling Kernel
         run: |
-          DTC_EXT=~/toolchains/dtc
+          # DTC_EXT=~/toolchains/dtc
           CLANG=~/toolchains/clang/bin
           GCC32=~/toolchains/arm-linux-androideabi-4.9/bin
           GCC64=~/toolchains/aarch64-linux-android-4.9/bin
@@ -67,6 +67,8 @@ jobs:
           export CROSS_COMPILE_ARM32=arm-linux-androideabi-
           output_dir=out
           pushd android-kernel
+          chmod +x $GITHUB_WORKSPACE/android-kernel/dtc/dtc
+          export DTC_EXT=$GITHUB_WORKSPACE/android-kernel/dtc/dtc
           make O="$output_dir" vendor/enchilada_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           popd
