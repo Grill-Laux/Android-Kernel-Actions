@@ -94,7 +94,7 @@ jobs:
           split_boot
           flash_boot
           EOF
-          cp $GITHUB_WORKSPACE/android-kernel/out/arch/arm64/boot/Image.gz .
+          cp $GITHUB_WORKSPACE/android-kernel/out/arch/arm64/boot/Image-dtb .
           zip -r boot.zip * -x .git README.md *placeholder
           ls
 #这里改下喵 主人需要把image格式以及内核defconfig配置改下喵
@@ -111,17 +111,11 @@ jobs:
             
             WARNING!!
             THIS KERNEL MUST WORK WITH 4.19-SUPPORTED LINEAGEOS!!!OR YOUR DEVICE WILL NOT WORK!!!
-            
-            KernelSU:
-            https://github.com/tiann/KernelSU
-            WARN!You must install the manager app from "https://github.com/tiann/KernelSU",or your KernelSU will not work!
 
             BuildTime
             ${{ env.BUILD_TIME }}
 
             Supported:
-            LXC
-            Docker
-            KernelSU
+            None. Test build.
           files: |
             AnyKernel3-master/boot.zip
