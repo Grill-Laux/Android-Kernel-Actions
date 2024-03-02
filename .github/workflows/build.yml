@@ -23,7 +23,7 @@ jobs:
       - name: check kernelsu release
         id: check_kernelsu_release
         run: |
-          kernelsu_release=`curl https://api.github.com/repos/wxt1221/KernelSU/releases/latest | jq -r .tag_name`
+          kernelsu_release=`curl https://api.github.com/repos/Grill-Laux/KernelSU/releases/latest | jq -r .tag_name`
           local_release=`curl --header 'authorization: Bearer ${{ github.token }}' https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name`
           echo $kernelsu_release
           echo $local_release
@@ -115,7 +115,7 @@ jobs:
             https://github.com/Grill-Laux/PixelExperience_kernel_oneplus_sdm845/tree/fourteen
             
             KernelSU:
-            https://github.com/wxt1221/KernelSU
+            https://github.com/Grill-Laux/KernelSU
             WARN!You must install the manager app from "https://github.com/wxt1221/KernelSU",or your KernelSU will not work!
 
             BuildTime
