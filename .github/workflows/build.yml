@@ -8,82 +8,25 @@ on:
         type: boolean
         default: false
 
-  schedule:
-    - cron: "50 9,21 * * *"
-
 jobs:
-  check_kernelsu_update:
-    name: check kernelsu update
-    runs-on: ubuntu-latest
-    steps:
-      - name: install common package
-        run: |
-          sudo apt update
-          sudo apt install -y curl jq
-      - name: check kernelsu release
-        id: check_kernelsu_release
-        run: |
-          kernelsu_release=`curl https://api.github.com/repos/tiann/KernelSU/releases/latest | jq -r .tag_name`
-          local_release=`curl --header 'authorization: Bearer ${{ github.token }}' https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name`
-          echo $kernelsu_release
-          echo $local_release
-          echo kernelsu_release=$kernelsu_release >> $GITHUB_OUTPUT
-          echo local_release=$local_release >> $GITHUB_OUTPUT
-    outputs:
-      kernelsu_release: ${{ steps.check_kernelsu_release.outputs.kernelsu_release }}
-      local_release: ${{ steps.check_kernelsu_release.outputs.local_release }}
-
   build:
-    needs: check_kernelsu_update
-    if: needs.check_kernelsu_update.outputs.kernelsu_release != needs.check_kernelsu_update.outputs.local_release
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: checkout kernel
-        uses: actions/checkout@v3
-        with:
-          repository: PixelExperience-Devices/kernel_oneplus_sdm845
-          ref: thirteen
-#repository请填写<owner>/<repository>呦
-#ref填写branch就可以啦
-#如果需要手动编译就要注释掉if那一行了哦
-#别忘了看看下面 有些地方也是要改的哦
-
       - name: Cloning Sources and Toolchain
         run: |
           echo "BUILD_TIME=$(TZ=Asia/Shanghai date "+%Y%m%d%H%M")" >> $GITHUB_ENV
           sudo apt update -y
           sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
           sudo apt clean
-          git clone https://github.com/Grill-Laux/PixelExperience_kernel_oneplus_sdm845 --depth=1 -b thirteen android-kernel
+          git clone https://github.com/Terminator-J/crdroid_kernel_oneplus_sdm845 --depth=1 -b 14.0-4.19-test android-kernel
           git clone https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r487747c --depth=1 --single-branch --no-tags -b 14.0 ~/toolchains/clang
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/aarch64-linux-android-4.9
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
           git clone https://github.com/osm0sis/anykernel
 #这里要修改上自己的clang编译器喵 如果主人也需要r445002就没必要改了喵
       
-      - name: Setup CLOSE ANDROID_PARANOID_NETWORK
-        run: |
-         sed -i '/CONFIG_ANDROID_PARANOID_NETWORK/d' android-kernel/arch/arm64/configs/enchilada_defconfig
-         echo "# CONFIG_ANDROID_PARANOID_NETWORK is not set" >> android-kernel/arch/arm64/configs/enchilada_defconfig
-#不需要的话主人注释掉本喵的上下两段喵
-      - name: Setup LXC_DOCKER
-        run: |
-         cd $GITHUB_WORKSPACE/
-         wget https://github.com/wu17481748/lxc-docker/releases/download/lxc-docker-2config/LXC-DOCKER-OPEN-CONFIG.sh
-         chmod 777 LXC-DOCKER-OPEN-CONFIG.sh
-         ./LXC-DOCKER-OPEN-CONFIG.sh android-kernel/arch/arm64/configs/enchilada_defconfig -w
-#主人需要打lxc patch的时候就要前面的#去掉喵 也要记得检查下内核源码中有没有/net/netfilter/xt_qtaguid.c这个文件捏 没有就不要取消注释咯
-#      - name: Setup LXC_PATCH
-#        run: |
-#         cd $GITHUB_WORKSPACE/
-#         git clone https://github.com/wu17481748/lxc-docker/archive/refs/tags/lxc-docker-2config.zip
-#         cd $GITHUB_WORKSPACE/
-#         unzip lxc-docker-2config.zip
-#         cd $GITHUB_WORKSPACE/lxc-docker-2config
-#         patch -p0 < lxc.patch
-
       - name: Compiling Kernel
         run: |
           CLANG=~/toolchains/clang/bin
@@ -98,57 +41,12 @@ jobs:
           output_dir=out
           pushd android-kernel
           #sudo cp -r ../Tools/file security/selinux/hooks.c
-          make O="$output_dir" enchilada_defconfig
+          make O="$output_dir" vendor/enchilada_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           popd
           
-      - name: Resource organization
-        run: |
-          mkdir -p out/arch/arm64/boot/
-          echo 123 > out/arch/arm64/boot/Image
-          echo 123 > out/arch/arm64/boot/Image.gz
-          echo 123 > out/arch/arm64/boot/Image.gz-dtb
-          curl -Lo AnyKernel3.zip https://github.com/Grill-Laux/AnyKernel3/archive/refs/heads/master.zip
-          unzip AnyKernel3.zip
-          cd AnyKernel3-master
-          cat > anykernel.sh <<EOF
-          properties() { '
-          do.devicecheck=0
-          do.cleanup=1
-          device.name1=enchilada
-          '; }
-          block=auto
-          is_slot_device=auto
-          . tools/ak3-core.sh
-          split_boot
-          flash_boot
-          EOF
-          cp $GITHUB_WORKSPACE/android-kernel/out/arch/arm64/boot/Image.gz-dtb .
-          zip -r boot.zip * -x .git README.md *placeholder
-          ls
-#这里改下喵 主人需要把image格式以及内核defconfig配置改下喵
-
-#      - name: Upload AnyKernel3
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: AnyKernel3_enchilada-lineageos-${{ env.BUILD_TIME }}
-#          path: anykernel/*
-          
-      - name: release
-        uses: softprops/action-gh-release@v1
+      - name: Upload target
+        uses: actions/upload-artifact@v3
         with:
-          tag_name: PixelExperience_${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}_manual
-          body: |
-            Device:
-            enchilada or fajita
-
-            KernelSource:
-            https://github.com/Grill-Laux/PixelExperience_kernel_oneplus_sdm845
-            
-            KernelSU:
-            https://github.com/tiann/KernelSU/releases/tag/${{ needs.check_kernelsu_update.outputs.kernelsu_release }}
-
-            BuildTime
-            ${{ env.BUILD_TIME }}
-          files: |
-            AnyKernel3-master/boot.zip
+          name: Image-dtb
+          path: android-kernel/out/arm64/boot/*
