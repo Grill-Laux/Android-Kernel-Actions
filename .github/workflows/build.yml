@@ -25,6 +25,7 @@ jobs:
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/aarch64-linux-android-4.9
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
           git clone https://github.com/osm0sis/anykernel
+          git clone https://github.com/Grill-Laux/android_prebuilts_misc_linux-x86_dtc_dtc ~/toolchains/dtc0 && chmod +x ~/toolchains/dtc0/dtc && export DTC_EXT=~/toolchains/dtc0/dtc
 #这里要修改上自己的clang编译器喵 如果主人也需要r445002就没必要改了喵
       
       - name: Compiling Kernel
