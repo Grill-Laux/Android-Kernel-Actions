@@ -43,7 +43,7 @@ jobs:
           sudo apt update -y
           sudo apt-get install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
           sudo apt clean
-          git clone https://github.com/Grill-Laux/android_pe_kernel_oneplus_sdm845 --recursive --depth=1 -b fourteen-wip android-kernel
+          git clone https://github.com/Grill-Laux/kernel_oneplus_sdm845 --recursive --depth=1 -b fourteen-qpr1 android-kernel
           git clone https://gitlab.com/crdroidandroid/android_prebuilts_clang_host_linux-x86_clang-r445002 --depth=1 --single-branch --no-tags -b 12.0 ~/toolchains/clang
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/aarch64-linux-android-4.9
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android-10.0.0_r47 --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
@@ -93,26 +93,14 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: PixelExperience_${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}_manual_wip
+          tag_name: PixelExperience_${{ needs.check_kernelsu_update.outputs.kernelsu_release }}_${{ env.BUILD_TIME }}_manual_qpr1
           body: |
             Device:
             enchilada/fajita
 
             KernelSource:
-            https://github.com/Grill-Laux/android_pe_kernel_oneplus_sdm845/tree/fourteen-wip
+            https://github.com/Grill-Laux/kernel_oneplus_sdm845/tree/fourteen-qpr1
             
-            KernelSU:
-            https://github.com/wxt1221/KernelSU
-            WARN!You must install the manager app from "https://github.com/wxt1221/KernelSU",or your KernelSU will not work!
-
-            BuildTime
-            ${{ env.BUILD_TIME }}
-
-            Supported:
-            LXC
-            Docker
-            KernelSU
-
             WARNING:This kernel is only for test.After flash this kernel,your device might cannot boot.
           files: |
             AnyKernel3-master/boot.zip
