@@ -23,16 +23,8 @@ jobs:
           sudo apt update -y
           sudo apt-get install -y git ccache wget automake flex lzop bison gperf build-essential zip curl zlib1g-dev libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3 gcc-9-aarch64-linux-gnu gcc-9-arm-linux-gnueabi gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi
           sudo apt clean
-          git clone https://github.com/Grill-Laux/kernel_oneplus_sdm845 android-kernel --recursive --depth=1 -b oos/wip-upstream
+          git clone https://github.com/Grill-Laux/kernel_oneplus_sdm845 ~/android-kernel --recursive --depth=1 -b oos/wip-upstream
           mkdir -p ~/toolchains/clang && cd ~/toolchains/clang && wget -O clang.tar.gz https://android.googlesource.com/platform//prebuilts/clang/host/linux-x86/+archive/refs/tags/android-14.0.0_r0.78/clang-r416183b.tar.gz && tar zxvf clang.tar.gz && rm -f clang.tar.gz && cd -
-          #git clone https://github.com/Grill-Laux/android_prebuilts_misc_linux-x86_dtc_dtc ~/toolchains/dtc
-          
-      - name: Cloning GCC
-        run: |
-          git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9 -b android12-release --depth=1 --single-branch --no-tags ~/toolchains/aarch64-linux-android-4.9
-          git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9 -b android12-release --depth=1 --single-branch --no-tags ~/toolchains/arm-linux-androideabi-4.9
-
-       
 
       - name: Compiling Kernel
         run: |
@@ -45,6 +37,7 @@ jobs:
           export CROSS_COMPILE=aarch64-linux-gnu-
           export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
           output_dir=out
+          cd ~/android-kernel
           make O=out sdm845-perf_defconfig
           make -j $(nproc) O=out CC=clang
           
