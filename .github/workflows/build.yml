@@ -8,9 +8,7 @@ on:
         type: boolean
         default: false
 
-  schedule:
-    - cron: "* 8,12,15,18,22 * * *"
-
+  
 jobs:
   check_kernelsu_update:
     name: check kernelsu update
