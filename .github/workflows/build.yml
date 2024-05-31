@@ -43,7 +43,7 @@ jobs:
           export CROSS_COMPILE_ARM32=arm-linux-androideabi-
           output_dir=out
           cd ~/android-kernel
-          make O="$output_dir" enchilada_defconfig
+          make O="$output_dir" lineage_oneplus5_defconfig
           make -j $(nproc) O="$output_dir" CC=clang
           
       - name: Resource organization
