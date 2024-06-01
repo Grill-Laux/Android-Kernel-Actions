@@ -41,7 +41,7 @@ jobs:
           output_dir=out
           cd ~/android-kernel
           make O="$output_dir" lineage_oneplus5_defconfig
-          make -j $(nproc) O="$output_dir" CC=clang
+          make -j $(nproc) O="$output_dir"
           
       - name: Resource organization
         run: |
