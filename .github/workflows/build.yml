@@ -27,7 +27,7 @@ jobs:
           xz -d gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu.tar.xz
           tar xf gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu.tar
           mkdir -p ~/toolchains/gcc
-          cp gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu/* ~/toolchains/gcc
+          cp -r gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu/* ~/toolchains/gcc
           rm -rf gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu.tar.xz
           git clone https://github.com/uwu-gl/android_kernel_oneplus_msm8998 --depth=1 -b lineage-21 ~/android-kernel
 
