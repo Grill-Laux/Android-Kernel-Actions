@@ -37,7 +37,7 @@ jobs:
           export SUBARCH=arm64
           export PATH=~/toolchains/gcc/bin:$PATH
           export CROSS_COMPILE=aarch64-none-linux-gnu-
-          export CROSS_COMPILE_ARM32=arm-linux-androideabi-
+          export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
           output_dir=out
           cd ~/android-kernel
           make O="$output_dir" lineage_oneplus5_defconfig
