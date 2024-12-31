@@ -38,7 +38,7 @@ jobs:
           export CLANG_TRIPLE=aarch64-linux-gnu-
           export CROSS_COMPILE=aarch64-linux-gnu-
           export CROSS_COMPILE_ARM32=arm-linux-gnueabi-
-          make O=out vendor/enchilada_defconfig
+          make O=out vendor/sdm845-perf_defconfig
           make -j16 O=out CC=clang
           
       - name: Upload target
